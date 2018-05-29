@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace XIVLauncher
 {
-    static class XIVGame
+    internal static class XIVGame
     {
         /// <summary>
         /// Launches FFXIV with the supplied parameters.
@@ -22,12 +22,14 @@ namespace XIVLauncher
         /// <param name="expansionlevel">current level of expansions loaded(0=ARR/default,1=Heavensward)</param>
         public static void LaunchGame(string realsid, int language, bool dx11, int expansionlevel)
         {
-            try {
+            try
+            {
                 Process ffxivgame = new Process();
                 if (dx11) { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv_dx11.exe"; } else { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv.exe"; }
                 ffxivgame.StartInfo.Arguments = $"DEV.TestSID={realsid} DEV.MaxEntitledExpansionID={expansionlevel} language={language}";
                 ffxivgame.Start();
-            }catch(Exception exc)
+            }
+            catch (Exception exc)
             {
                 MessageBox.Show("Could not launch executable. Is your game path correct?\n\n" + exc, "Launch failed", MessageBoxButtons.OK);
             }
@@ -64,7 +66,6 @@ namespace XIVLauncher
 
             return sidClient.ResponseHeaders["X-Patch-Unique-Id"];
         }
-
 
         private static string GetStored() //this is needed to be able to access the login site correctly
         {
@@ -105,13 +106,13 @@ namespace XIVLauncher
         {
             try
             {
-                using (StreamReader sr = new StreamReader(Settings.GetGamePath()+@"/game/ffxivgame.ver"))
+                using (StreamReader sr = new StreamReader(Settings.GetGamePath() + @"/game/ffxivgame.ver"))
                 {
                     string line = sr.ReadToEnd();
                     return line;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return "0";
             }
@@ -146,7 +147,6 @@ namespace XIVLauncher
                     MessageBoxIcon.Error);
                 return false;
             }
-
         }
 
         private static void InitiateSslTrust()

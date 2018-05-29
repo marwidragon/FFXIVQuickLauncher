@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -32,7 +32,7 @@ namespace XIVLauncher
                 backuptool.StartInfo.FileName = Settings.GetGamePath() + "/boot/ffxivconfig.exe";
                 backuptool.Start();
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 MessageBox.Show("Could not launch ffxivconfig. Is your game path correct?\n\n" + exc, "Launch failed", MessageBoxButtons.OK);
             }

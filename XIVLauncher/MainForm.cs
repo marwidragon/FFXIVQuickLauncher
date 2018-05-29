@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using FolderSelect;
 
@@ -17,12 +17,12 @@ namespace XIVLauncher
                 saveCheckBox.Checked = true;
             }
 
-            if(Properties.Settings.Default.setupcomplete != true)
+            if (Properties.Settings.Default.setupcomplete != true)
             {
                 InitialSetup();
             }
 
-            if(Properties.Settings.Default.autologin == true && !Settings.IsAdministrator())
+            if (Properties.Settings.Default.autologin == true && !Settings.IsAdministrator())
             {
                 try
                 {
@@ -43,7 +43,7 @@ namespace XIVLauncher
                         Environment.Exit(0);
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     this.Enabled = true;
                     MessageBox.Show("Logging in failed, check your login information or try again.\n\n" + e, "Login failed", MessageBoxButtons.OK);
@@ -85,13 +85,13 @@ namespace XIVLauncher
                     if (result == System.Windows.Forms.DialogResult.No)
                     {
                         autoLoginCheckBox.Checked = false;
-
                     }
                     else
                     {
                         Properties.Settings.Default["autologin"] = true;
                     }
-                } else { Properties.Settings.Default["autologin"] = false; }
+                }
+                else { Properties.Settings.Default["autologin"] = false; }
                 Properties.Settings.Default.Save();
             }
             else
@@ -107,7 +107,7 @@ namespace XIVLauncher
                 XIVGame.LaunchGame(XIVGame.GetRealSid(IDTextBox.Text, PWTextBox.Text, OTPTextBox.Text), Settings.GetLanguage(), Settings.IsDX11(), Settings.GetExpansionLevel());
                 Environment.Exit(0);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 MessageBox.Show("Logging in failed, check your login information or try again.\n\n" + exc, "Login failed", MessageBoxButtons.OK);
                 StatusLabel.Text = "";
@@ -117,7 +117,8 @@ namespace XIVLauncher
 
         private void SaveBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (saveCheckBox.Checked) { autoLoginCheckBox.Enabled = true; } else
+            if (saveCheckBox.Checked) { autoLoginCheckBox.Enabled = true; }
+            else
             {
                 autoLoginCheckBox.Enabled = false;
                 autoLoginCheckBox.Checked = false;
@@ -186,7 +187,6 @@ It should contain the folders ""game"" and ""boot"".", "Select Game Path", Messa
 
                 Login(null, null);
             }
-
         }
     }
 }

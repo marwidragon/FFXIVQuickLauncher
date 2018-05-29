@@ -1,10 +1,9 @@
-﻿using System.Security.Principal;
+using System.Security.Principal;
 
 namespace XIVLauncher
 {
-    static class Settings
+    internal static class Settings
     {
-
         public static string GetGamePath()
         {
             return Properties.Settings.Default.gamepath;
@@ -30,7 +29,5 @@ namespace XIVLauncher
             return (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
                     .IsInRole(WindowsBuiltInRole.Administrator);
         }
-
-
     }
 }
