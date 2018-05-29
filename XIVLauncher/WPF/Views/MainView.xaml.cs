@@ -21,6 +21,7 @@ namespace XIVLauncher.WPF.Views
             this.InitializeComponent();
 
             this.Loaded += this.MainView_Loaded;
+
             this.PreviewKeyDown += (x, y) =>
             {
                 if (y.Key == Key.Enter)
@@ -66,7 +67,8 @@ namespace XIVLauncher.WPF.Views
             }
 
             if (this.Config.AutoLogin &&
-                !Settings.IsAdministrator())
+                !Settings.IsAdministrator() &&
+                this.CanExecute())
             {
                 var stat = await Task.Run(() => XIVGame.GetGateStatus());
 
@@ -109,11 +111,20 @@ namespace XIVLauncher.WPF.Views
             }
         }
 
+        private bool CanExecute() =>
+            !string.IsNullOrEmpty(this.Config.SavedID) &&
+            !string.IsNullOrEmpty(this.Config.SavedPW);
+
         private ICommand loginCommand;
 
         public ICommand LoginCommand =>
             this.loginCommand ?? (this.loginCommand = new DelegateCommand(async () =>
             {
+                if (!this.CanExecute())
+                {
+                    return;
+                }
+
                 XIVLauncher.Properties.Settings.Default.Save();
 
                 if (!this.Config.ExistGame)
@@ -169,6 +180,11 @@ namespace XIVLauncher.WPF.Views
         public ICommand QueueMaintenanceCommand =>
             this.queueMaintenanceCommand ?? (this.queueMaintenanceCommand = new DelegateCommand(async () =>
             {
+                if (!this.CanExecute())
+                {
+                    return;
+                }
+
                 if (!this.Config.ExistGame)
                 {
                     MessageBox.Show(

@@ -48,9 +48,9 @@
       <StackPanel Margin="0 20 0 0" Orientation="Horizontal">
         <Label Content="SQUARE ENIX PASSWORD" Width="240" />
         <PasswordBox
-        Width="280"
-        local:PasswordHelper.Attach="True"
-        local:PasswordHelper.Password="{Binding Text, ElementName=plain, Mode=TwoWay}" />
+          Width="280"
+          local:PasswordHelper.Attach="True"
+          local:PasswordHelper.Password="{Binding Text, ElementName=plain, Mode=TwoWay}" />
         <TextBlock x:Name="plain" Text="{Binding Config.SavedPW, Mode=TwoWay}" Visibility="Collapsed" />
       </StackPanel>
 
@@ -60,10 +60,10 @@
       </StackPanel>
 
       <CheckBox
-      HorizontalAlignment="Center"
-      Margin="0 25 0 0"
-      Content="Auto Login"
-      IsChecked="{Binding Config.AutoLogin, Mode=TwoWay}" />
+        HorizontalAlignment="Center"
+        Margin="0 25 0 0"
+        Content="Auto Login"
+        IsChecked="{Binding Config.AutoLogin, Mode=TwoWay}" />
 
       <Button
         x:Name="LoginButton"
@@ -71,6 +71,10 @@
         Height="40"
         Width="200"
         Content="LOGIN"
+        Background="Navy"
+        Foreground="White"
+        BorderThickness="0"
+        FontWeight="Bold"
         IsDefault="True"
         Command="{Binding LoginCommand, Mode=OneWay}" />
     </StackPanel>
