@@ -21,6 +21,13 @@ namespace XIVLauncher.WPF.Views
             this.InitializeComponent();
 
             this.Loaded += this.MainView_Loaded;
+            this.PreviewKeyDown += (x, y) =>
+            {
+                if (y.Key == Key.Enter)
+                {
+                    this.LoginButton.Focus();
+                }
+            };
         }
 
         public SettingsModel Config => SettingsModel.Instance;

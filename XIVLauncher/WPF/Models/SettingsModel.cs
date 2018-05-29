@@ -105,7 +105,7 @@ namespace XIVLauncher.WPF.Models
             }
         }
 
-        private string onetimePassword;
+        private string onetimePassword = string.Empty;
 
         public string OnetimePassword
         {

@@ -66,12 +66,13 @@
       IsChecked="{Binding Config.AutoLogin, Mode=TwoWay}" />
 
       <Button
-      Margin="0 30 0 0"
-      Height="40"
-      Width="200"
-      Content="LOGIN"
-      IsDefault="True"
-      Command="{Binding LoginCommand, Mode=OneWay}" />
+        x:Name="LoginButton"
+        Margin="0 30 0 0"
+        Height="40"
+        Width="200"
+        Content="LOGIN"
+        IsDefault="True"
+        Command="{Binding LoginCommand, Mode=OneWay}" />
     </StackPanel>
 
     <DockPanel DockPanel.Dock="Bottom">
