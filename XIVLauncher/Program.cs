@@ -15,6 +15,8 @@ namespace XIVLauncher
         {
             // enabled TLS1.2
             ServicePointManager.SecurityProtocol =
+                SecurityProtocolType.Ssl3 |
+                SecurityProtocolType.Tls |
                 SecurityProtocolType.Tls11 |
                 SecurityProtocolType.Tls12;
 
