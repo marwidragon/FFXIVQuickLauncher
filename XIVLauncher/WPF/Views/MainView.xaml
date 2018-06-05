@@ -60,6 +60,7 @@
       </StackPanel>
 
       <CheckBox
+        Visibility="Hidden"
         HorizontalAlignment="Center"
         Margin="0 25 0 0"
         Content="Auto Login"
