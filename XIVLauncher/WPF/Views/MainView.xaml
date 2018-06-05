@@ -81,16 +81,21 @@
     </StackPanel>
 
     <DockPanel DockPanel.Dock="Bottom">
-      <Button
-        DockPanel.Dock="Left"
-        HorizontalAlignment="Left"
-        VerticalAlignment="Bottom"
-        Padding="5"
-        Background="Transparent"
-        BorderThickness="0"
-        Foreground="MediumBlue"
-        Content="Maintenance Queue"
-        Command="{Binding QueueMaintenanceCommand, Mode=OneWay}" />
+      <StackPanel
+          DockPanel.Dock="Left"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Bottom">
+
+        <Label Content="{Binding WaitingMessage, Mode=OneWay}" FontStyle="Italic" FontSize="13" />
+
+        <Button
+          Padding="5"
+          Background="Transparent"
+          BorderThickness="0"
+          Foreground="MediumBlue"
+          Content="Maintenance Queue"
+          Command="{Binding QueueMaintenanceCommand, Mode=OneWay}" />
+      </StackPanel>
 
       <Button
         DockPanel.Dock="Right"

@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,7 +16,8 @@ namespace XIVLauncher.WPF.Views
     /// MainView.xaml の相互作用ロジック
     /// </summary>
     public partial class MainView :
-        Window
+        Window,
+        INotifyPropertyChanged
     {
         public MainView()
         {
@@ -175,6 +178,14 @@ namespace XIVLauncher.WPF.Views
                 }
             }));
 
+        private string waitingMessage = string.Empty;
+
+        public string WaitingMessage
+        {
+            get => this.waitingMessage;
+            set => this.SetProperty(ref this.waitingMessage, value);
+        }
+
         private ICommand queueMaintenanceCommand;
 
         public ICommand QueueMaintenanceCommand =>
@@ -185,6 +196,7 @@ namespace XIVLauncher.WPF.Views
                     return;
                 }
 
+#if !DEBUG
                 if (!this.Config.ExistGame)
                 {
                     MessageBox.Show(
@@ -195,6 +207,7 @@ namespace XIVLauncher.WPF.Views
 
                     return;
                 }
+#endif
 
                 var result = MessageBox.Show(
                     "This will be querying the maintenance status server, until the maintenance is over and then launch the game. Make sure the login information you entered is correct." +
@@ -209,16 +222,35 @@ namespace XIVLauncher.WPF.Views
                     return;
                 }
 
+                var startTime = DateTime.Now;
+
                 await Task.Run(async () =>
                 {
+                    var i = 0;
+
                     while (true)
                     {
-                        if (XIVGame.GetGateStatus())
+                        if (i == 0)
                         {
-                            break;
+                            if (XIVGame.GetGateStatus())
+                            {
+                                break;
+                            }
                         }
 
-                        await Task.Delay(TimeSpan.FromSeconds(5));
+                        var span = DateTime.Now - startTime;
+                        await Dispatcher.InvokeAsync(() =>
+                        {
+                            this.WaitingMessage = $" {span.ToString(@"mm\:ss")}  Wating{new string('.', i)} ";
+                        });
+
+                        i++;
+                        if (i > 4)
+                        {
+                            i = 0;
+                        }
+
+                        await Task.Delay(TimeSpan.FromSeconds(1.0));
                     }
                 });
 
@@ -253,5 +285,38 @@ namespace XIVLauncher.WPF.Views
 
                 view.Show();
             }));
+
+        #region INotifyPropertyChanged
+
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged(
+            [CallerMemberName]string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual bool SetProperty<T>(
+            ref T field,
+            T value,
+            [CallerMemberName]string propertyName = null)
+        {
+            if (Equals(field, value))
+            {
+                return false;
+            }
+
+            field = value;
+            this.PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(propertyName));
+
+            return true;
+        }
+
+        #endregion INotifyPropertyChanged
     }
 }
