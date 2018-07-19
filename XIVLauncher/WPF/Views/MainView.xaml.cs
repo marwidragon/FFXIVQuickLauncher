@@ -35,7 +35,7 @@ namespace XIVLauncher.WPF.Views
             };
         }
 
-        public SettingsModel Config => SettingsModel.Instance;
+        public Settings Config => Models.Settings.Instance;
 
         private async void MainView_Loaded(
             object sender,
@@ -71,7 +71,7 @@ namespace XIVLauncher.WPF.Views
             }
 
             if (this.Config.AutoLogin &&
-                !Settings.IsAdministrator() &&
+                !SettingsHelper.IsAdministrator() &&
                 this.CanExecute())
             {
                 var stat = await Task.Run(() => XIVGame.GetGateStatus());
@@ -85,7 +85,7 @@ namespace XIVLauncher.WPF.Views
                         MessageBoxImage.Information);
 
                     this.Config.AutoLogin = false;
-                    XIVLauncher.Properties.Settings.Default.Save();
+                    Settings.Instance.Save();
 
                     return;
                 }
@@ -99,7 +99,7 @@ namespace XIVLauncher.WPF.Views
                                 this.Config.SavedPW,
                                 this.Config.OnetimePassword),
                             (int)this.Config.Language,
-                            this.Config.IsDXII,
+                            this.Config.IsDX11,
                             (int)this.Config.ExpansionLevel));
 
                     this.Close();
@@ -129,7 +129,7 @@ namespace XIVLauncher.WPF.Views
                     return;
                 }
 
-                XIVLauncher.Properties.Settings.Default.Save();
+                Settings.Instance.Save();
 
                 if (!this.Config.ExistGame)
                 {
@@ -161,7 +161,7 @@ namespace XIVLauncher.WPF.Views
                     await Task.Run(() =>
                     {
                         var kicked = false;
-                        foreach (var tool in SettingsModel.Instance.ToolSettings.OrderBy(x => x.Priority))
+                        foreach (var tool in Models.Settings.Instance.ToolSettings.OrderBy(x => x.Priority))
                         {
                             if (tool.Run())
                             {
@@ -184,7 +184,7 @@ namespace XIVLauncher.WPF.Views
                                 this.Config.SavedPW,
                                 this.Config.OnetimePassword),
                             (int)this.Config.Language,
-                            this.Config.IsDXII,
+                            this.Config.IsDX11,
                             (int)this.Config.ExpansionLevel));
 
                     // 起動したら終わる

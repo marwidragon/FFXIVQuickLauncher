@@ -1,24 +1,25 @@
 using System;
 using System.Security.Principal;
 using Prism.Mvvm;
+using XIVLauncher.WPF.Models;
 
 namespace XIVLauncher
 {
     [Serializable]
-    public class Settings :
+    public class SettingsHelper :
         BindableBase
     {
         public static string GetGamePath() =>
-            Properties.Settings.Default.gamepath;
+            Settings.Instance.GamePath;
 
         public static int GetLanguage() =>
-            System.Convert.ToInt32(Properties.Settings.Default.language);
+            Convert.ToInt32(Settings.Instance.Language);
 
         public static bool IsDX11() =>
-            System.Convert.ToBoolean(Properties.Settings.Default.isdx11);
+            Settings.Instance.IsDX11;
 
         public static int GetExpansionLevel() =>
-            Properties.Settings.Default.expansionlevel;
+            Convert.ToInt32(Settings.Instance.ExpansionLevel);
 
         public static bool IsAdministrator() =>
             (new WindowsPrincipal(WindowsIdentity.GetCurrent()))

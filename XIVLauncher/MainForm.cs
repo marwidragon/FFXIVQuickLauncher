@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using FolderSelect;
+using XIVLauncher.WPF.Models;
 
 namespace XIVLauncher
 {
@@ -10,19 +11,19 @@ namespace XIVLauncher
         {
             InitializeComponent();
 
-            if (Properties.Settings.Default.savedid != "")
+            if (Settings.Instance.SavedID != "")
             {
-                IDTextBox.Text = Properties.Settings.Default.savedid;
-                PWTextBox.Text = Properties.Settings.Default.savedpw;
+                IDTextBox.Text = Settings.Instance.SavedID;
+                PWTextBox.Text = Settings.Instance.SavedPW;
                 saveCheckBox.Checked = true;
             }
 
-            if (Properties.Settings.Default.setupcomplete != true)
+            if (Settings.Instance.SetupComplete != true)
             {
                 InitialSetup();
             }
 
-            if (Properties.Settings.Default.autologin == true && !Settings.IsAdministrator())
+            if (Settings.Instance.AutoLogin == true && !SettingsHelper.IsAdministrator())
             {
                 try
                 {
@@ -34,12 +35,12 @@ namespace XIVLauncher
                         MessageBox.Show(
                             "Square Enix seems to be running maintenance work right now. The game shouldn't be launched.");
 
-                        Properties.Settings.Default["autologin"] = false;
-                        Properties.Settings.Default.Save();
+                        Settings.Instance.AutoLogin = false;
+                        Settings.Instance.Save();
                     }
                     else
                     {
-                        XIVGame.LaunchGame(XIVGame.GetRealSid(IDTextBox.Text, PWTextBox.Text, OTPTextBox.Text), Settings.GetLanguage(), Settings.IsDX11(), Settings.GetExpansionLevel());
+                        XIVGame.LaunchGame(XIVGame.GetRealSid(IDTextBox.Text, PWTextBox.Text, OTPTextBox.Text), SettingsHelper.GetLanguage(), SettingsHelper.IsDX11(), SettingsHelper.GetExpansionLevel());
                         Environment.Exit(0);
                     }
                 }
@@ -51,8 +52,8 @@ namespace XIVLauncher
             }
             else
             {
-                Properties.Settings.Default["autologin"] = false;
-                Properties.Settings.Default.Save();
+                Settings.Instance.AutoLogin = false;
+                Settings.Instance.Save();
             }
         }
 
@@ -76,8 +77,8 @@ namespace XIVLauncher
 
             if (saveCheckBox.Checked)
             {
-                Properties.Settings.Default["savedid"] = IDTextBox.Text;
-                Properties.Settings.Default["savedpw"] = PWTextBox.Text;
+                Settings.Instance.SavedID = IDTextBox.Text;
+                Settings.Instance.SavedPW = PWTextBox.Text;
                 if (autoLoginCheckBox.Checked)
                 {
                     DialogResult result = MessageBox.Show("This option will log you in automatically with the credentials you entered.\nTo reset it again, launch this application as administrator once.\n\nDo you really want to enable it?", "Enabling Autologin", MessageBoxButtons.YesNo);
@@ -88,23 +89,23 @@ namespace XIVLauncher
                     }
                     else
                     {
-                        Properties.Settings.Default["autologin"] = true;
+                        Settings.Instance.AutoLogin = true;
                     }
                 }
-                else { Properties.Settings.Default["autologin"] = false; }
-                Properties.Settings.Default.Save();
+                else { Settings.Instance.AutoLogin = false; }
+                Settings.Instance.Save();
             }
             else
             {
-                Properties.Settings.Default["savedid"] = "";
-                Properties.Settings.Default["savedpw"] = "";
-                Properties.Settings.Default.Save();
+                Settings.Instance.SavedID = "";
+                Settings.Instance.SavedPW = "";
+                Settings.Instance.Save();
             }
 
             StatusLabel.Text = "Logging in...";
             try
             {
-                XIVGame.LaunchGame(XIVGame.GetRealSid(IDTextBox.Text, PWTextBox.Text, OTPTextBox.Text), Settings.GetLanguage(), Settings.IsDX11(), Settings.GetExpansionLevel());
+                XIVGame.LaunchGame(XIVGame.GetRealSid(IDTextBox.Text, PWTextBox.Text, OTPTextBox.Text), SettingsHelper.GetLanguage(), SettingsHelper.IsDX11(), SettingsHelper.GetExpansionLevel());
                 Environment.Exit(0);
             }
             catch (Exception exc)
@@ -135,7 +136,7 @@ It should contain the folders ""game"" and ""boot"".", "Select Game Path", Messa
 
             if (fsd.ShowDialog(IntPtr.Zero))
             {
-                Properties.Settings.Default["gamepath"] = fsd.FileName;
+                Settings.Instance.GamePath = fsd.FileName;
             }
             else
             {
@@ -144,13 +145,13 @@ It should contain the folders ""game"" and ""boot"".", "Select Game Path", Messa
 
             DialogResult dxresult = MessageBox.Show("Do you want to use DirectX 11?", " ", MessageBoxButtons.YesNo, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
-            if (dxresult == System.Windows.Forms.DialogResult.Yes) { Properties.Settings.Default["isdx11"] = true; } else { Properties.Settings.Default["isdx11"] = false; }
+            if (dxresult == System.Windows.Forms.DialogResult.Yes) { Settings.Instance.IsDX11 = true; } else { Settings.Instance.IsDX11 = false; }
 
             ExpansionSelector exSelector = new ExpansionSelector();
             exSelector.ShowDialog();
 
-            Properties.Settings.Default["setupcomplete"] = true;
-            Properties.Settings.Default.Save();
+            Settings.Instance.SetupComplete = true;
+            Settings.Instance.Save();
         }
 
         private void QueueButton_Click(object sender, EventArgs e) //TODO: please do this in a thread when you care enough at some point

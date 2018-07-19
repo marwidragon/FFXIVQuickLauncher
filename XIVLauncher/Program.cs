@@ -14,7 +14,7 @@ namespace XIVLauncher
         [STAThread]
         public static void Main()
         {
-            SettingsModel.Instance.Load();
+            Settings.Instance.Load();
 
             // enabled TLS1.2
             ServicePointManager.SecurityProtocol =
@@ -23,14 +23,14 @@ namespace XIVLauncher
                 SecurityProtocolType.Tls11 |
                 SecurityProtocolType.Tls12;
 
-            if (XIVLauncher.Properties.Settings.Default.useWPF)
+            if (Settings.Instance.UseWPF)
             {
                 var app = new System.Windows.Application()
                 {
                     ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose
                 };
 
-                app.Exit += (x, y) => SettingsModel.Instance.Save();
+                app.Exit += (x, y) => Settings.Instance.Save();
 
                 app.Run(new MainView());
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using XIVLauncher.WPF.Models;
 
 namespace XIVLauncher
 {
@@ -9,18 +10,18 @@ namespace XIVLauncher
         public OptionsForm()
         {
             InitializeComponent();
-            LanguageSelector.SelectedIndex = System.Convert.ToInt32(Properties.Settings.Default.language);
-            dxCheckBox.Checked = Properties.Settings.Default.isdx11;
-            comboBox1.SelectedIndex = Properties.Settings.Default.expansionlevel;
-            pathLabel.Text = "Current Game Path:\n" + Properties.Settings.Default.gamepath;
+            LanguageSelector.SelectedIndex = System.Convert.ToInt32(Settings.Instance.Language);
+            dxCheckBox.Checked = Settings.Instance.IsDX11;
+            comboBox1.SelectedIndex = (int)Settings.Instance.ExpansionLevel;
+            pathLabel.Text = "Current Game Path:\n" + Settings.Instance.GamePath;
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default["language"] = LanguageSelector.SelectedIndex;
-            Properties.Settings.Default["expansionlevel"] = comboBox1.SelectedIndex;
-            if (dxCheckBox.Checked) { Properties.Settings.Default["isdx11"] = true; } else { Properties.Settings.Default["isdx11"] = false; }
-            Properties.Settings.Default.Save();
+            Settings.Instance.Language = (FFXIVLanguages)Enum.ToObject(typeof(FFXIVLanguages), LanguageSelector.SelectedIndex);
+            Settings.Instance.ExpansionLevel = (FFXIVExpantions)Enum.ToObject(typeof(FFXIVExpantions), comboBox1.SelectedIndex);
+            if (dxCheckBox.Checked) { Settings.Instance.IsDX11 = true; } else { Settings.Instance.IsDX11 = false; }
+            Settings.Instance.Save();
             this.Close();
         }
 
@@ -29,7 +30,7 @@ namespace XIVLauncher
             try
             {
                 Process backuptool = new Process();
-                backuptool.StartInfo.FileName = Settings.GetGamePath() + "/boot/ffxivconfig.exe";
+                backuptool.StartInfo.FileName = SettingsHelper.GetGamePath() + "/boot/ffxivconfig.exe";
                 backuptool.Start();
             }
             catch (Exception exc)
@@ -45,9 +46,9 @@ It should contain the folders ""game"" and ""boot"".", "Select Game Path", Messa
 
             if (GamePathDialog.ShowDialog() == DialogResult.OK)
             {
-                Properties.Settings.Default["gamepath"] = GamePathDialog.SelectedPath;
-                Properties.Settings.Default.Save();
-                pathLabel.Text = "Current Game Path:\n" + Properties.Settings.Default.gamepath;
+                Settings.Instance.GamePath = GamePathDialog.SelectedPath;
+                Settings.Instance.Save();
+                pathLabel.Text = "Current Game Path:\n" + Settings.Instance.GamePath;
             }
         }
     }

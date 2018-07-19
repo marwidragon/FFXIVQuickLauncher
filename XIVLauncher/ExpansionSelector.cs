@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using XIVLauncher.WPF.Models;
 
 namespace XIVLauncher
 {
@@ -15,8 +16,8 @@ namespace XIVLauncher
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default["expansionlevel"] = comboBox1.SelectedIndex;
-            Properties.Settings.Default.Save();
+            Settings.Instance.ExpansionLevel = (FFXIVExpantions)Enum.ToObject(typeof(FFXIVExpantions), comboBox1.SelectedIndex);
+            Settings.Instance.Save();
             Close();
         }
     }

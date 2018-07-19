@@ -25,7 +25,7 @@ namespace XIVLauncher
             try
             {
                 Process ffxivgame = new Process();
-                if (dx11) { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv_dx11.exe"; } else { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv.exe"; }
+                if (dx11) { ffxivgame.StartInfo.FileName = SettingsHelper.GetGamePath() + "/game/ffxiv_dx11.exe"; } else { ffxivgame.StartInfo.FileName = SettingsHelper.GetGamePath() + "/game/ffxiv.exe"; }
                 ffxivgame.StartInfo.Arguments = $"DEV.TestSID={realsid} DEV.MaxEntitledExpansionID={expansionlevel} language={language}";
                 ffxivgame.Start();
             }
@@ -47,7 +47,7 @@ namespace XIVLauncher
             string hashstr = "";
             try
             {
-                hashstr = "ffxivboot.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivboot.exe") + ",ffxivlauncher.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivlauncher.exe") + ",ffxivupdater.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivupdater.exe"); //make the string of hashed files to prove game version
+                hashstr = "ffxivboot.exe/" + GenerateHash(SettingsHelper.GetGamePath() + "/boot/ffxivboot.exe") + ",ffxivlauncher.exe/" + GenerateHash(SettingsHelper.GetGamePath() + "/boot/ffxivlauncher.exe") + ",ffxivupdater.exe/" + GenerateHash(SettingsHelper.GetGamePath() + "/boot/ffxivupdater.exe"); //make the string of hashed files to prove game version
             }
             catch (Exception exc)
             {
@@ -106,7 +106,7 @@ namespace XIVLauncher
         {
             try
             {
-                using (StreamReader sr = new StreamReader(Settings.GetGamePath() + @"/game/ffxivgame.ver"))
+                using (StreamReader sr = new StreamReader(SettingsHelper.GetGamePath() + @"/game/ffxivgame.ver"))
                 {
                     string line = sr.ReadToEnd();
                     return line;

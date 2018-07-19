@@ -30,17 +30,17 @@ namespace XIVLauncher.WPF.Models
     }
 
     [Serializable]
-    public class SettingsModel :
+    public class Settings :
         BindableBase
     {
         #region Singleton
 
-        private static SettingsModel instance;
+        private static Settings instance;
 
-        public static SettingsModel Instance =>
-            instance ?? (instance = new SettingsModel());
+        public static Settings Instance =>
+            instance ?? (instance = new Settings());
 
-        private SettingsModel()
+        private Settings()
         {
         }
 
@@ -49,7 +49,7 @@ namespace XIVLauncher.WPF.Models
         #region I/O
 
         public static string FileName =>
-            Assembly.GetEntryAssembly().Location.Replace(".exe", ".config");
+            Assembly.GetEntryAssembly().Location.Replace(".exe", ".Settings.config");
 
         public void Load()
         {
@@ -63,7 +63,7 @@ namespace XIVLauncher.WPF.Models
                 if (sr.BaseStream.Length > 0)
                 {
                     var xs = new XmlSerializer(this.GetType());
-                    var data = xs.Deserialize(sr) as SettingsModel;
+                    var data = xs.Deserialize(sr) as Settings;
                     if (data != null)
                     {
                         instance = data;
@@ -91,18 +91,20 @@ namespace XIVLauncher.WPF.Models
 
         #endregion I/O
 
-        [XmlIgnore]
-        public bool IsDXII
+        private bool useWPF = true;
+
+        public bool UseWPF
         {
-            get => XIVLauncher.Properties.Settings.Default.isdx11;
-            set
-            {
-                if (XIVLauncher.Properties.Settings.Default.isdx11 != value)
-                {
-                    XIVLauncher.Properties.Settings.Default.isdx11 = value;
-                    this.RaisePropertyChanged();
-                }
-            }
+            get => this.useWPF;
+            set => this.SetProperty(ref this.useWPF, value);
+        }
+
+        private bool isDX11 = true;
+
+        public bool IsDX11
+        {
+            get => this.isDX11;
+            set => this.SetProperty(ref this.isDX11, value);
         }
 
         [XmlIgnore]
@@ -110,61 +112,36 @@ namespace XIVLauncher.WPF.Models
             !string.IsNullOrEmpty(this.GamePath) &&
             Directory.Exists(this.GamePath);
 
-        [XmlIgnore]
+        private string gamePath;
+
         public string GamePath
         {
-            get => XIVLauncher.Properties.Settings.Default.gamepath;
-            set
-            {
-                if (XIVLauncher.Properties.Settings.Default.gamepath != value)
-                {
-                    XIVLauncher.Properties.Settings.Default.gamepath = value;
-                    this.RaisePropertyChanged();
-                    this.RaisePropertyChanged(nameof(this.ExistGame));
-                }
-            }
+            get => this.gamePath;
+            set => this.SetProperty(ref this.gamePath, value);
         }
 
-        [XmlIgnore]
+        private FFXIVLanguages language = FFXIVLanguages.English;
+
         public FFXIVLanguages Language
         {
-            get => (FFXIVLanguages)Enum.ToObject(typeof(FFXIVLanguages), XIVLauncher.Properties.Settings.Default.language);
-            set
-            {
-                if (XIVLauncher.Properties.Settings.Default.language != (int)value)
-                {
-                    XIVLauncher.Properties.Settings.Default.language = (int)value;
-                    this.RaisePropertyChanged();
-                }
-            }
+            get => this.language;
+            set => this.SetProperty(ref this.language, value);
         }
 
-        [XmlIgnore]
+        private string savedID;
+
         public string SavedID
         {
-            get => XIVLauncher.Properties.Settings.Default.savedid;
-            set
-            {
-                if (XIVLauncher.Properties.Settings.Default.savedid != value)
-                {
-                    XIVLauncher.Properties.Settings.Default.savedid = value;
-                    this.RaisePropertyChanged();
-                }
-            }
+            get => this.savedID;
+            set => this.SetProperty(ref this.savedID, value);
         }
 
-        [XmlIgnore]
+        private string savedPW;
+
         public string SavedPW
         {
-            get => XIVLauncher.Properties.Settings.Default.savedpw;
-            set
-            {
-                if (XIVLauncher.Properties.Settings.Default.savedpw != value)
-                {
-                    XIVLauncher.Properties.Settings.Default.savedpw = value;
-                    this.RaisePropertyChanged();
-                }
-            }
+            get => this.savedPW;
+            set => this.SetProperty(ref this.savedPW, value);
         }
 
         private string onetimePassword = string.Empty;
@@ -176,46 +153,28 @@ namespace XIVLauncher.WPF.Models
             set => this.SetProperty(ref this.onetimePassword, value);
         }
 
-        [XmlIgnore]
+        private bool autoLogin;
+
         public bool AutoLogin
         {
-            get => XIVLauncher.Properties.Settings.Default.autologin;
-            set
-            {
-                if (XIVLauncher.Properties.Settings.Default.autologin != value)
-                {
-                    XIVLauncher.Properties.Settings.Default.autologin = value;
-                    this.RaisePropertyChanged();
-                }
-            }
+            get => this.autoLogin;
+            set => this.SetProperty(ref this.autoLogin, value);
         }
 
-        [XmlIgnore]
+        private bool setupComplete = false;
+
         public bool SetupComplete
         {
-            get => XIVLauncher.Properties.Settings.Default.setupcomplete;
-            set
-            {
-                if (XIVLauncher.Properties.Settings.Default.setupcomplete != value)
-                {
-                    XIVLauncher.Properties.Settings.Default.setupcomplete = value;
-                    this.RaisePropertyChanged();
-                }
-            }
+            get => this.setupComplete;
+            set => this.SetProperty(ref this.setupComplete, value);
         }
 
-        [XmlIgnore]
+        private FFXIVExpantions expansionLevel = FFXIVExpantions.Stormblood;
+
         public FFXIVExpantions ExpansionLevel
         {
-            get => (FFXIVExpantions)Enum.ToObject(typeof(FFXIVExpantions), XIVLauncher.Properties.Settings.Default.expansionlevel);
-            set
-            {
-                if (XIVLauncher.Properties.Settings.Default.expansionlevel != (int)value)
-                {
-                    XIVLauncher.Properties.Settings.Default.expansionlevel = (int)value;
-                    this.RaisePropertyChanged();
-                }
-            }
+            get => this.expansionLevel;
+            set => this.SetProperty(ref this.expansionLevel, value);
         }
 
         #region Tools
@@ -255,10 +214,10 @@ namespace XIVLauncher.WPF.Models
         public ICommand AddToolCommand =>
             this.addToolCommand ?? (this.addToolCommand = new DelegateCommand(() =>
             {
-                SettingsModel.Instance.ToolSettings.Add(new ToolSetting()
+                Settings.Instance.ToolSettings.Add(new ToolSetting()
                 {
-                    Priority = SettingsModel.Instance.ToolSettings.Any() ?
-                        SettingsModel.Instance.ToolSettings.Max(x => x.Priority) + 1 :
+                    Priority = Settings.Instance.ToolSettings.Any() ?
+                        Settings.Instance.ToolSettings.Max(x => x.Priority) + 1 :
                         1
                 });
             }));
@@ -309,6 +268,13 @@ namespace XIVLauncher.WPF.Models
                     return false;
                 }
 
+                // プロセスがすでに起動しているか？
+                var procName = System.IO.Path.GetFileNameWithoutExtension(this.path);
+                if (Process.GetProcessesByName(procName).Length > 0)
+                {
+                    return false;
+                }
+
                 try
                 {
                     var proc = new Process();
@@ -342,9 +308,9 @@ namespace XIVLauncher.WPF.Models
                         return;
                     }
 
-                    if (SettingsModel.Instance.ToolSettings.Contains(tool))
+                    if (Settings.Instance.ToolSettings.Contains(tool))
                     {
-                        SettingsModel.Instance.ToolSettings.Remove(tool);
+                        Settings.Instance.ToolSettings.Remove(tool);
                     }
                 }));
         }

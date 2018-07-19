@@ -24,11 +24,11 @@ namespace XIVLauncher.WPF.Views
 
             this.Closed += (x, y) =>
             {
-                XIVLauncher.Properties.Settings.Default.Save();
+                Settings.Instance.Save();
             };
         }
 
-        public SettingsModel Config => SettingsModel.Instance;
+        public Settings Config => Models.Settings.Instance;
 
         public IEnumerable<FFXIVLanguages> Languages =>
             Enum.GetValues(typeof(FFXIVLanguages)).Cast<FFXIVLanguages>();
