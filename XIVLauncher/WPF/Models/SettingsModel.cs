@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Xml.Serialization;
 using Prism.Commands;
 using Prism.Mvvm;
+using XIVLauncher.Common;
 
 namespace XIVLauncher.WPF.Models
 {
@@ -138,10 +139,20 @@ namespace XIVLauncher.WPF.Models
 
         private string savedPW;
 
+        [XmlIgnore]
         public string SavedPW
         {
             get => this.savedPW;
             set => this.SetProperty(ref this.savedPW, value);
+        }
+
+        [XmlElement]
+        public string SavedPWEncrypted
+        {
+            get => Cryptor.EncryptString(this.SavedPW);
+            set => this.SavedPW = string.IsNullOrEmpty(value) ?
+                string.Empty :
+                Cryptor.DecryptString(value);
         }
 
         private string onetimePassword = string.Empty;
