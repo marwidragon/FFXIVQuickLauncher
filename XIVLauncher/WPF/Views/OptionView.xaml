@@ -50,42 +50,88 @@
     </Style>
   </Window.Resources>
 
-  <DockPanel Margin="10">
-    <StackPanel DockPanel.Dock="Top">
-      <Label Content="Game Path" />
-      <TextBox Margin="0 5 0 0" Height="26" Text="{Binding Config.GamePath, Mode=TwoWay}" />
-      <Button
-        Margin="0 3 0 0"
-        Content="Browse..."
-        Command="{Binding BrowseGameCommand, Mode=OneWay}" />
+  <TabControl>
+    <TabItem>
+      <TabItem.Header>
+        <TextBlock Text="Settings" Padding="10 1" />
+      </TabItem.Header>
 
-      <CheckBox
-        Margin="0 20 0 0"
-        Content="Use DirectX 11"
-        IsChecked="{Binding Config.IsDXII, Mode=TwoWay}" />
+      <DockPanel Margin="10">
+        <StackPanel DockPanel.Dock="Top">
+          <Label Content="Game Path" />
+          <TextBox Margin="0 5 0 0" Height="26" Text="{Binding Config.GamePath, Mode=TwoWay}" />
+          <Button
+            Margin="0 3 0 0"
+            Content="Browse..."
+            Command="{Binding BrowseGameCommand, Mode=OneWay}" />
 
-      <Label Margin="0 20 0 0" Content="Language" />
-      <ComboBox
-        Margin="0 5 0 0"
-        HorizontalAlignment="Left"
-        Width="250"
-        ItemsSource="{Binding Languages, Mode=OneWay}"
-        SelectedItem="{Binding Config.Language, Mode=TwoWay}" />
+          <CheckBox
+            Margin="0 20 0 0"
+            Content="Use DirectX 11"
+            IsChecked="{Binding Config.IsDXII, Mode=TwoWay}" />
 
-      <Label Margin="0 20 0 0" Content="Expantion" />
-      <ComboBox
-        Margin="0 5 0 0"
-        HorizontalAlignment="Left"
-        Width="250"
-        ItemsSource="{Binding Expantions, Mode=OneWay}"
-        SelectedItem="{Binding Config.ExpansionLevel, Mode=TwoWay}" />
-    </StackPanel>
+          <Label Margin="0 20 0 0" Content="Language" />
+          <ComboBox
+            Margin="0 5 0 0"
+            HorizontalAlignment="Left"
+            Width="250"
+            ItemsSource="{Binding Languages, Mode=OneWay}"
+            SelectedItem="{Binding Config.Language, Mode=TwoWay}" />
 
-    <DockPanel DockPanel.Dock="Bottom">
-      <Button
-        Margin="0 0 0 0"
-        VerticalAlignment="Bottom" Content="Launch Backup Tool"
-        Command="{Binding LaunchBackupToolCommand, Mode=OneWay}" />
-    </DockPanel>
-  </DockPanel>
+          <Label Margin="0 20 0 0" Content="Expantion" />
+          <ComboBox
+            Margin="0 5 0 0"
+            HorizontalAlignment="Left"
+            Width="250"
+            ItemsSource="{Binding Expantions, Mode=OneWay}"
+            SelectedItem="{Binding Config.ExpansionLevel, Mode=TwoWay}" />
+        </StackPanel>
+
+        <DockPanel DockPanel.Dock="Bottom">
+          <Button
+            Margin="0 0 0 0"
+            VerticalAlignment="Bottom" Content="Launch Backup Tool"
+            Command="{Binding LaunchBackupToolCommand, Mode=OneWay}" />
+        </DockPanel>
+      </DockPanel>
+    </TabItem>
+
+    <TabItem>
+      <TabItem.Header>
+        <TextBlock Text="Tools" Padding="10 1" />
+      </TabItem.Header>
+
+      <DockPanel Margin="10 10 0 10">
+        <Grid>
+          <TextBlock HorizontalAlignment="Left">
+            <Hyperlink Command="{Binding Config.AddToolCommand, Mode=OneWay}">Add</Hyperlink>
+          </TextBlock>
+
+          <ScrollViewer
+            Margin="0 30 0 0"
+            Focusable="False"
+            VerticalScrollBarVisibility="Visible"
+            HorizontalScrollBarVisibility="Disabled">
+
+            <ItemsControl
+              ItemsSource="{Binding Config.ToolSettingsView, Mode=OneWay}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <DockPanel Margin="0 0 10 5">
+                    <TextBox Text="{Binding Path, Mode=TwoWay}" Width="500" Height="30" VerticalContentAlignment="Center" ToolTip="Tool Path" />
+                    <CheckBox Margin="5 0 0 0" Content="Enabled" IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                    <CheckBox Margin="10 0 0 0" Content="RunAs" IsChecked="{Binding IsRunAs, Mode=TwoWay}" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                    <TextBox Margin="20 0 0 0" Text="{Binding Priority, Mode=TwoWay}" Width="40" Height="30" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" ToolTip="Start Priority" />
+                    <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
+                      <Hyperlink Command="{Binding DeleteCommand, Mode=OneWay}" CommandParameter="{Binding}">x</Hyperlink>
+                    </TextBlock>
+                  </DockPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </Grid>
+      </DockPanel>
+    </TabItem>
+  </TabControl>
 </Window>

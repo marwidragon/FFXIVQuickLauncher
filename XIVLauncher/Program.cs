@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Windows.Forms;
+using XIVLauncher.WPF.Models;
 using XIVLauncher.WPF.Views;
 
 namespace XIVLauncher
@@ -13,6 +14,8 @@ namespace XIVLauncher
         [STAThread]
         public static void Main()
         {
+            SettingsModel.Instance.Load();
+
             // enabled TLS1.2
             ServicePointManager.SecurityProtocol =
                 SecurityProtocolType.Ssl3 |
@@ -26,6 +29,8 @@ namespace XIVLauncher
                 {
                     ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose
                 };
+
+                app.Exit += (x, y) => SettingsModel.Instance.Save();
 
                 app.Run(new MainView());
             }

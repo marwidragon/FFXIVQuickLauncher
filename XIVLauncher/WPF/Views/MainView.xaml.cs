@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -156,6 +157,26 @@ namespace XIVLauncher.WPF.Views
 
                 try
                 {
+                    // ツールを起動する
+                    await Task.Run(() =>
+                    {
+                        var kicked = false;
+                        foreach (var tool in SettingsModel.Instance.ToolSettings.OrderBy(x => x.Priority))
+                        {
+                            if (tool.Run())
+                            {
+                                kicked = true;
+                                Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                            }
+                        }
+
+                        if (kicked)
+                        {
+                            Thread.Sleep(TimeSpan.FromSeconds(2));
+                        }
+                    });
+
+                    // FFXIVを起動する
                     await Task.Run(() =>
                         XIVGame.LaunchGame(
                             XIVGame.GetRealSid(
@@ -166,6 +187,8 @@ namespace XIVLauncher.WPF.Views
                             this.Config.IsDXII,
                             (int)this.Config.ExpansionLevel));
 
+                    // 起動したら終わる
+                    await Task.Delay(TimeSpan.FromSeconds(1));
                     this.Close();
                 }
                 catch (Exception ex)
