@@ -131,10 +131,20 @@ namespace XIVLauncher.WPF.Models
 
         private string savedID;
 
+        [XmlIgnore]
         public string SavedID
         {
             get => this.savedID;
             set => this.SetProperty(ref this.savedID, value);
+        }
+
+        [XmlElement]
+        public string SavedIDEncrypted
+        {
+            get => Cryptor.EncryptString(this.SavedID);
+            set => this.SavedID = string.IsNullOrEmpty(value) ?
+                string.Empty :
+                Cryptor.DecryptString(value);
         }
 
         private string savedPW;
