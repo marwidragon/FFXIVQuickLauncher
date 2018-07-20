@@ -10,5 +10,7 @@ A custom launcher for FINAL FANTASY XIV
 
 ## Screenshots
 ![main_view](https://raw.githubusercontent.com/anoyetta/FFXIVQuickLauncher/master/images/main_view.png)  
-![option1_view](https://raw.githubusercontent.com/anoyetta/FFXIVQuickLauncher/master/images/option1_view.png)  
-![option2_view](https://raw.githubusercontent.com/anoyetta/FFXIVQuickLauncher/master/images/option2_view.png)  
+
+![option1_view](https://raw.githubusercontent.com/anoyetta/FFXIVQuickLauncher/master/images/options1_view.png)  
+
+![option2_view](https://raw.githubusercontent.com/anoyetta/FFXIVQuickLauncher/master/images/options2_view.png)  
