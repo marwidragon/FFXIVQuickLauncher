@@ -214,10 +214,7 @@ namespace XIVLauncher.WPF.Views
         public ICommand QueueMaintenanceCommand =>
             this.queueMaintenanceCommand ?? (this.queueMaintenanceCommand = new DelegateCommand(async () =>
             {
-                if (!this.CanExecute())
-                {
-                    return;
-                }
+                this.WaitingMessage = string.Empty;
 
 #if !DEBUG
                 if (!this.Config.ExistGame)
@@ -233,8 +230,9 @@ namespace XIVLauncher.WPF.Views
 #endif
 
                 var result = MessageBox.Show(
-                    "This will be querying the maintenance status server, until the maintenance is over and then launch the game. Make sure the login information you entered is correct." +
-                    "\n\n!!!The application will be unresponsive!!!\n\nDo you want to continue?",
+                    "This will be querying the maintenance status server,\nuntil the maintenance is over." +
+                    "\n\n!!!The application will be unresponsive!!!" +
+                    "\n\nDo you want to continue?",
                     "Maintenance Queue",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question,
@@ -277,23 +275,48 @@ namespace XIVLauncher.WPF.Views
                     }
                 });
 
-                Console.Beep(529, 130);
-                Thread.Sleep(200);
-                Console.Beep(529, 100);
-                Thread.Sleep(30);
-                Console.Beep(529, 100);
-                Thread.Sleep(300);
-                Console.Beep(420, 140);
-                Thread.Sleep(300);
-                Console.Beep(466, 100);
-                Thread.Sleep(300);
-                Console.Beep(529, 160);
-                Thread.Sleep(200);
-                Console.Beep(466, 100);
-                Thread.Sleep(30);
-                Console.Beep(529, 900);
+                this.WaitingMessage = " Server is Available!";
 
+                if (string.IsNullOrEmpty(this.IDTextBox.Text))
+                {
+                    this.IDTextBox.Focus();
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(this.PlainPWBox.Text))
+                    {
+                        this.PWBox.Focus();
+                    }
+                    else
+                    {
+                        this.OTPTextBox.Focus();
+                    }
+                }
+
+                await Task.Run(() =>
+                {
+                    Console.Beep(529, 130);
+                    Thread.Sleep(200);
+                    Console.Beep(529, 100);
+                    Thread.Sleep(30);
+                    Console.Beep(529, 100);
+                    Thread.Sleep(300);
+                    Console.Beep(420, 140);
+                    Thread.Sleep(300);
+                    Console.Beep(466, 100);
+                    Thread.Sleep(300);
+                    Console.Beep(529, 160);
+                    Thread.Sleep(200);
+                    Console.Beep(466, 100);
+                    Thread.Sleep(30);
+                    Console.Beep(529, 900);
+                });
+
+                // 自動ログインはしない
+                // というかワンタイムパスワードがあるのでできない
+                /*
                 this.LoginCommand.Execute(null);
+                */
             }));
 
         private ICommand optionCommand;

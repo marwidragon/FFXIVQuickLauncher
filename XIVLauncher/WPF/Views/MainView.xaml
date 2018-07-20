@@ -48,10 +48,11 @@
       <StackPanel Margin="0 20 0 0" Orientation="Horizontal">
         <Label Content="SQUARE ENIX PASSWORD" Width="240" />
         <PasswordBox
+          x:Name="PWBox"
           Width="280"
           local:PasswordHelper.Attach="True"
           local:PasswordHelper.Password="{Binding Text, ElementName=plain, Mode=TwoWay}" />
-        <TextBlock x:Name="plain" Text="{Binding Config.SavedPW, Mode=TwoWay}" Visibility="Collapsed" />
+        <TextBlock x:Name="PlainPWBox" Text="{Binding Config.SavedPW, Mode=TwoWay}" Visibility="Collapsed" />
       </StackPanel>
 
       <StackPanel Margin="0 20 0 0" Orientation="Horizontal">
