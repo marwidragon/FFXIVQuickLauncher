@@ -52,6 +52,11 @@ namespace XIVLauncher.WPF.Views
                 this.OTPTextBox.Focus();
             }
 
+            if (!this.IsActive)
+            {
+                this.Activate();
+            }
+
             if (!this.Config.ExistGame)
             {
                 MessageBox.Show(

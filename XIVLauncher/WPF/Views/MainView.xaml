@@ -51,7 +51,7 @@
           x:Name="PWBox"
           Width="280"
           local:PasswordHelper.Attach="True"
-          local:PasswordHelper.Password="{Binding Text, ElementName=plain, Mode=TwoWay}" />
+          local:PasswordHelper.Password="{Binding Text, ElementName=PlainPWBox, Mode=TwoWay}" />
         <TextBlock x:Name="PlainPWBox" Text="{Binding Config.SavedPW, Mode=TwoWay}" Visibility="Collapsed" />
       </StackPanel>
 
