@@ -172,7 +172,7 @@ namespace XIVLauncher.WPF.Views
 
                         if (kicked)
                         {
-                            Thread.Sleep(TimeSpan.FromSeconds(2));
+                            Thread.Sleep(TimeSpan.FromSeconds(Settings.Instance.DelayLaunchFFXIV));
                         }
                     });
 

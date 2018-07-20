@@ -103,25 +103,43 @@
 
       <DockPanel Margin="10 10 0 10">
         <Grid>
-          <TextBlock HorizontalAlignment="Left">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+
+          <TextBlock Grid.Row="0" HorizontalAlignment="Left">
             <Hyperlink Command="{Binding Config.AddToolCommand, Mode=OneWay}">Add</Hyperlink>
           </TextBlock>
 
+          <StackPanel
+            Grid.Row="2"
+            Orientation="Horizontal">
+            <TextBlock Text="Delay Launch FFXIV" VerticalAlignment="Center" />
+            <TextBox Text="{Binding Config.DelayLaunchFFXIV, Mode=TwoWay, StringFormat=N1}" Margin="15 0 0 0" Width="38" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
+            <TextBlock Text="s" Margin="5 0 0 0" VerticalAlignment="Center" />
+          </StackPanel>
+
           <ScrollViewer
-            Margin="0 30 0 0"
+            Grid.Row="1"
+            Margin="0 10 0 0"
+            IsTabStop="False"
             Focusable="False"
             VerticalScrollBarVisibility="Visible"
             HorizontalScrollBarVisibility="Disabled">
 
             <ItemsControl
-              ItemsSource="{Binding Config.ToolSettingsView, Mode=OneWay}">
+              ItemsSource="{Binding Config.ToolSettingsView, Mode=OneWay}"
+              IsTabStop="False"
+              Focusable="False">
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
                   <DockPanel Margin="0 0 10 5">
                     <TextBox Text="{Binding Path, Mode=TwoWay}" Width="500" Height="30" VerticalContentAlignment="Center" ToolTip="Tool Path" />
                     <CheckBox Margin="5 0 0 0" Content="Enabled" IsChecked="{Binding IsEnabled, Mode=TwoWay}" VerticalContentAlignment="Center" VerticalAlignment="Center" />
                     <CheckBox Margin="10 0 0 0" Content="RunAs" IsChecked="{Binding IsRunAs, Mode=TwoWay}" VerticalContentAlignment="Center" VerticalAlignment="Center" />
-                    <TextBox Margin="20 0 0 0" Text="{Binding Priority, Mode=TwoWay}" Width="40" Height="30" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" ToolTip="Start Priority" />
+                    <TextBox Margin="20 0 0 0" Text="{Binding Priority, Mode=TwoWay}" Width="28" Height="30" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" ToolTip="Start Priority" />
                     <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
                       <Hyperlink Command="{Binding DeleteCommand, Mode=OneWay}" CommandParameter="{Binding}">x</Hyperlink>
                     </TextBlock>

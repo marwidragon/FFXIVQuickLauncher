@@ -188,6 +188,14 @@ namespace XIVLauncher.WPF.Models
             set => this.SetProperty(ref this.expansionLevel, value);
         }
 
+        private double delayLaunchFFXIV = 3.0;
+
+        public double DelayLaunchFFXIV
+        {
+            get => this.delayLaunchFFXIV;
+            set => this.SetProperty(ref this.delayLaunchFFXIV, value);
+        }
+
         #region Tools
 
         private ObservableCollection<ToolSetting> toolSettings = new ObservableCollection<ToolSetting>();
@@ -300,6 +308,8 @@ namespace XIVLauncher.WPF.Models
 
                     proc.StartInfo.UseShellExecute = true;
                     proc.Start();
+
+                    proc.WaitForInputIdle(10 * 1000);
 
                     return true;
                 }

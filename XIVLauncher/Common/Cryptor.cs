@@ -26,6 +26,11 @@ namespace XIVLauncher.Common
             string sourceString,
             string password = DefaultPassword)
         {
+            if (string.IsNullOrEmpty(sourceString))
+            {
+                return sourceString;
+            }
+
             var encryptedString = string.Empty;
 
             using (var rijndael = new RijndaelManaged())
@@ -57,6 +62,11 @@ namespace XIVLauncher.Common
             string sourceString,
             string password = DefaultPassword)
         {
+            if (string.IsNullOrEmpty(sourceString))
+            {
+                return sourceString;
+            }
+
             var decryptedString = string.Empty;
 
             using (var rijndael = new RijndaelManaged())
