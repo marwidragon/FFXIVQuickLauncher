@@ -1,5 +1,5 @@
-# XIVQuickLauncher [![Build status](https://ci.appveyor.com/api/projects/status/xc3hx4rhmrd310kc?svg=true)](https://ci.appveyor.com/project/goaaats/ffxivquicklauncher)
-A custom launcher for FINAL FANTASY XIV
+# XIVQuickLauncher 
+A custom launcher for FINAL FANTASY XIV, anoyetta edition.
 
 * 通常のランチャーよりもすばやく起動できます
 * IDとパスワードを保存し入力を省略できます
