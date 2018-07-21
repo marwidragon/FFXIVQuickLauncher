@@ -33,6 +33,11 @@ namespace XIVLauncher.WPF.Views
                     this.LoginButton.Focus();
                 }
             };
+
+            this.Closed += (x, y) =>
+            {
+                Application.Current.Shutdown();
+            };
         }
 
         public Settings Config => Models.Settings.Instance;
