@@ -149,12 +149,14 @@ namespace XIVLauncher.WPF.Views
 
                 this.isProcessing = true;
 
-                this.Dispatcher.BeginInvoke(new Action(() =>
+                try
+                {
+                    this.LoginAsync();
+                }
+                finally
                 {
                     this.isProcessing = false;
-                }), DispatcherPriority.ApplicationIdle);
-
-                this.LoginAsync();
+                }
             }));
 
         private async void LoginAsync()
@@ -187,10 +189,11 @@ namespace XIVLauncher.WPF.Views
 
             try
             {
+                var kicked = false;
+
                 // ツールを起動する
                 await Task.Run(() =>
                 {
-                    var kicked = false;
                     foreach (var tool in Models.Settings.Instance.ToolSettings.OrderBy(x => x.Priority))
                     {
                         if (tool.Run())
@@ -199,12 +202,12 @@ namespace XIVLauncher.WPF.Views
                             Thread.Sleep(TimeSpan.FromSeconds(0.5));
                         }
                     }
-
-                    if (kicked)
-                    {
-                        Thread.Sleep(TimeSpan.FromSeconds(Settings.Instance.DelayLaunchFFXIV));
-                    }
                 });
+
+                if (kicked)
+                {
+                    Thread.Sleep(TimeSpan.FromSeconds(Settings.Instance.DelayLaunchFFXIV));
+                }
 
                 // FFXIVを起動する
                 await Task.Run(() =>
