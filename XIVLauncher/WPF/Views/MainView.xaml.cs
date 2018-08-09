@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Threading;
 using FolderSelect;
 using Prism.Commands;
 using XIVLauncher.WPF.Models;
@@ -124,87 +125,106 @@ namespace XIVLauncher.WPF.Views
             !string.IsNullOrEmpty(this.Config.SavedID) &&
             !string.IsNullOrEmpty(this.Config.SavedPW);
 
+        private volatile bool isProcessing = false;
+
         private ICommand loginCommand;
 
         public ICommand LoginCommand =>
-            this.loginCommand ?? (this.loginCommand = new DelegateCommand(async () =>
+            this.loginCommand ?? (this.loginCommand = new DelegateCommand(() =>
             {
                 if (!this.CanExecute())
                 {
                     return;
                 }
 
-                Settings.Instance.Save();
-
-                if (!this.Config.ExistGame)
+                if (this.isProcessing)
                 {
-                    MessageBox.Show(
-                        "FFXIV not found.\nPlease setup options. [Options] -> [Game Path]",
-                        "Not Avalable",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-
                     return;
                 }
 
-                var stat = await Task.Run(() => XIVGame.GetGateStatus());
+                this.isProcessing = true;
 
-                if (!stat)
+                this.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    MessageBox.Show(
-                        "SQUARE ENIX seems to be running maintenance work right now.\nThe game shouldn't be launched.",
-                        "Login failed",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    this.isProcessing = false;
+                }), DispatcherPriority.ApplicationIdle);
 
-                    return;
-                }
-
-                try
-                {
-                    // ツールを起動する
-                    await Task.Run(() =>
-                    {
-                        var kicked = false;
-                        foreach (var tool in Models.Settings.Instance.ToolSettings.OrderBy(x => x.Priority))
-                        {
-                            if (tool.Run())
-                            {
-                                kicked = true;
-                                Thread.Sleep(TimeSpan.FromSeconds(0.5));
-                            }
-                        }
-
-                        if (kicked)
-                        {
-                            Thread.Sleep(TimeSpan.FromSeconds(Settings.Instance.DelayLaunchFFXIV));
-                        }
-                    });
-
-                    // FFXIVを起動する
-                    await Task.Run(() =>
-                        XIVGame.LaunchGame(
-                            XIVGame.GetRealSid(
-                                this.Config.SavedID,
-                                this.Config.SavedPW,
-                                this.Config.OnetimePassword),
-                            (int)this.Config.Language,
-                            this.Config.IsDX11,
-                            (int)this.Config.ExpansionLevel));
-
-                    // 起動したら終わる
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    this.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(
-                        "Logging in failed, check your login information or try again.\n\n" + ex,
-                        "Login failed",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
+                this.LoginAsync();
             }));
+
+        private async void LoginAsync()
+        {
+            Settings.Instance.Save();
+
+            if (!this.Config.ExistGame)
+            {
+                MessageBox.Show(
+                    "FFXIV not found.\nPlease setup options. [Options] -> [Game Path]",
+                    "Not Avalable",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return;
+            }
+
+            var stat = await Task.Run(() => XIVGame.GetGateStatus());
+
+            if (!stat)
+            {
+                MessageBox.Show(
+                    "SQUARE ENIX seems to be running maintenance work right now.\nThe game shouldn't be launched.",
+                    "Login failed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return;
+            }
+
+            try
+            {
+                // ツールを起動する
+                await Task.Run(() =>
+                {
+                    var kicked = false;
+                    foreach (var tool in Models.Settings.Instance.ToolSettings.OrderBy(x => x.Priority))
+                    {
+                        if (tool.Run())
+                        {
+                            kicked = true;
+                            Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                        }
+                    }
+
+                    if (kicked)
+                    {
+                        Thread.Sleep(TimeSpan.FromSeconds(Settings.Instance.DelayLaunchFFXIV));
+                    }
+                });
+
+                // FFXIVを起動する
+                await Task.Run(() =>
+                    XIVGame.LaunchGame(
+                        XIVGame.GetRealSid(
+                            this.Config.SavedID,
+                            this.Config.SavedPW,
+                            this.Config.OnetimePassword),
+                        (int)this.Config.Language,
+                        this.Config.IsDX11,
+                        (int)this.Config.ExpansionLevel));
+
+                // 起動したら終わる
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Logging in failed, check your login information or try again.\n\n" + ex,
+                    "Login failed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
 
         private string waitingMessage = string.Empty;
 
