@@ -206,7 +206,7 @@ namespace XIVLauncher.WPF.Views
 
                 if (kicked)
                 {
-                    Thread.Sleep(TimeSpan.FromSeconds(Settings.Instance.DelayLaunchFFXIV));
+                    await Task.Delay(TimeSpan.FromSeconds(Settings.Instance.DelayLaunchFFXIV));
                 }
 
                 // FFXIVを起動する
@@ -221,7 +221,7 @@ namespace XIVLauncher.WPF.Views
                         (int)this.Config.ExpansionLevel));
 
                 // 起動したら終わる
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(0.5));
                 this.Close();
             }
             catch (Exception ex)
