@@ -1,3 +1,5 @@
+using FolderSelect;
+using Prism.Commands;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -8,8 +10,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using FolderSelect;
-using Prism.Commands;
 using XIVLauncher.WPF.Models;
 
 namespace XIVLauncher.WPF.Views
@@ -33,11 +33,6 @@ namespace XIVLauncher.WPF.Views
                 {
                     this.LoginButton.Focus();
                 }
-            };
-
-            this.Closed += (x, y) =>
-            {
-                Application.Current.Shutdown();
             };
         }
 
