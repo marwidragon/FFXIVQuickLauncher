@@ -229,6 +229,8 @@ namespace XIVLauncher.WPF.Models
                 IsLiveSortingRequested = true,
             };
 
+            src.SortDescriptions.Add(new SortDescription(nameof(ToolSetting.IsPostProcess), ListSortDirection.Ascending));
+            src.SortDescriptions.Add(new SortDescription(nameof(ToolSetting.Delay), ListSortDirection.Ascending));
             src.SortDescriptions.Add(new SortDescription(nameof(ToolSetting.Priority), ListSortDirection.Ascending));
 
 #if DEBUG
@@ -259,6 +261,8 @@ namespace XIVLauncher.WPF.Models
             private bool isEnabled;
             private bool isRunAs;
             private int priority;
+            private bool isPostProcess;
+            private double delay = 0;
 
             public string Path
             {
@@ -282,6 +286,18 @@ namespace XIVLauncher.WPF.Models
             {
                 get => this.priority;
                 set => this.SetProperty(ref this.priority, value);
+            }
+
+            public bool IsPostProcess
+            {
+                get => this.isPostProcess;
+                set => this.SetProperty(ref this.isPostProcess, value);
+            }
+
+            public double Delay
+            {
+                get => this.delay;
+                set => this.SetProperty(ref this.delay, value);
             }
 
             public bool Run()

@@ -1,5 +1,3 @@
-using FolderSelect;
-using Prism.Commands;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -10,6 +8,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using FolderSelect;
+using Prism.Commands;
 using XIVLauncher.WPF.Models;
 
 namespace XIVLauncher.WPF.Views
@@ -189,7 +189,11 @@ namespace XIVLauncher.WPF.Views
                 // ツールを起動する
                 await Task.Run(() =>
                 {
-                    foreach (var tool in Models.Settings.Instance.ToolSettings.OrderBy(x => x.Priority))
+                    foreach (var tool in Models.Settings.Instance.ToolSettings
+                        .Where(x =>
+                            x.IsEnabled &&
+                            !x.IsPostProcess)
+                        .OrderBy(x => x.Priority))
                     {
                         if (tool.Run())
                         {
@@ -214,6 +218,32 @@ namespace XIVLauncher.WPF.Views
                         (int)this.Config.Language,
                         this.Config.IsDX11,
                         (int)this.Config.ExpansionLevel));
+                var ffxivStartedTime = DateTime.Now;
+
+                // ポストプロセスツールを起動する
+                await Task.Run(() =>
+                {
+                    var posts =
+                        from x in Models.Settings.Instance.ToolSettings
+                        where
+                        x.IsEnabled &&
+                        x.IsPostProcess
+                        orderby
+                        x.Delay,
+                        x.Priority
+                        select
+                        x;
+
+                    foreach (var tool in posts)
+                    {
+                        if (DateTime.Now >= ffxivStartedTime.AddSeconds(tool.Delay))
+                        {
+                            tool.Run();
+                        }
+
+                        Thread.Sleep(TimeSpan.FromSeconds(0.05));
+                    }
+                });
 
                 // 起動したら終わる
                 await Task.Delay(TimeSpan.FromSeconds(0.5));
