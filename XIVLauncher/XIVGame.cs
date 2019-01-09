@@ -8,13 +8,14 @@ using System.Net.Security;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Settings = XIVLauncher.SettingsHelper;
 
 namespace XIVLauncher
 {
     internal static class XIVGame
     {
         private static string UserAgent = "SQEXAuthor/2.0.0(Windows 6.2; ja-jp; 45d19cc985)";
-        
+
         /// <summary>
         /// Launches FFXIV with the supplied parameters.
         /// </summary>
@@ -28,7 +29,7 @@ namespace XIVLauncher
             {
                 Process ffxivgame = new Process();
                 if (dx11) { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv_dx11.exe"; } else { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv.exe"; }
-                ffxivgame.StartInfo.Arguments = $"DEV.TestSID={realsid} DEV.MaxEntitledExpansionID={expansionlevel} language={language}";
+                ffxivgame.StartInfo.Arguments = $"DEV.TestSID={realsid} DEV.MaxEntitledExpansionID={expansionlevel} language={language} region=1";
                 ffxivgame.Start();
             }
             catch (Exception exc)
@@ -49,7 +50,12 @@ namespace XIVLauncher
             string hashstr = "";
             try
             {
-                hashstr = "ffxivboot.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivboot.exe") + ",ffxivlauncher.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivlauncher.exe") + ",ffxivupdater.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivupdater.exe"); //make the string of hashed files to prove game version
+                hashstr = "ffxivboot.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivboot.exe") +
+                          ",ffxivboot64.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivboot64.exe") +
+                          ",ffxivlauncher.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivlauncher.exe") +
+                          ",ffxivlauncher64.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivlauncher64.exe") +
+                          ",ffxivupdater.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivupdater.exe") +
+                          ",ffxivupdater64.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivupdater64.exe"); //make the string of hashed files to prove game version//make the string of hashed files to prove game version
             }
             catch (Exception exc)
             {
@@ -112,7 +118,7 @@ namespace XIVLauncher
         {
             try
             {
-                using (StreamReader sr = new StreamReader(SettingsHelper.GetGamePath() + @"/game/ffxivgame.ver"))
+                using (StreamReader sr = new StreamReader(Settings.GetGamePath() + @"/game/ffxivgame.ver"))
                 {
                     string line = sr.ReadToEnd();
                     return line;
@@ -166,12 +172,3 @@ namespace XIVLauncher
         }
     }
 }
-
-                if (dx11) { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv_dx11.exe"; } else { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv.exe"; }
-                ffxivgame.StartInfo.Arguments = $"DEV.TestSID={realsid} DEV.MaxEntitledExpansionID={expansionlevel} language={language} region=1";
-                hashstr = "ffxivboot.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivboot.exe") +
-                          ",ffxivboot64.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivboot64.exe") +
-                          ",ffxivlauncher.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivlauncher.exe") + 
-                          ",ffxivlauncher64.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivlauncher64.exe") + 
-                          ",ffxivupdater.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivupdater.exe") +
-                          ",ffxivupdater64.exe/" + GenerateHash(Settings.GetGamePath() + "/boot/ffxivupdater64.exe"); //make the string of hashed files to prove game version//make the string of hashed files to prove game version
