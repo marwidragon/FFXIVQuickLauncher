@@ -30,11 +30,7 @@ namespace XIVLauncher
                     ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose
                 };
 
-                app.Exit += (x, y) =>
-                {
-                    Settings.Instance.Save();
-                    Settings.ToolSetting.CloseAdminLauncher();
-                };
+                app.Exit += (x, y) => Settings.Instance.Save();
 
                 app.Run(new MainView());
             }

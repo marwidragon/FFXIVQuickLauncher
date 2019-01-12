@@ -331,16 +331,16 @@ namespace XIVLauncher.WPF.Models
 
                 try
                 {
-                    if (this.isRunAs)
-                    {
-                        this.LaunchRunAs(this.path);
-                        return true;
-                    }
-
                     var proc = new Process();
 
                     proc.StartInfo.FileName = this.path;
                     proc.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(this.path);
+
+                    if (this.isRunAs)
+                    {
+                        proc.StartInfo.Verb = "RunAs";
+                    }
+
                     proc.StartInfo.UseShellExecute = true;
                     proc.Start();
 
@@ -352,52 +352,6 @@ namespace XIVLauncher.WPF.Models
                 {
                     return false;
                 }
-            }
-
-            public static void CloseAdminLauncher()
-            {
-                if (adminLauncher != null)
-                {
-                    adminLauncher.Close();
-                }
-            }
-
-            private static Process adminLauncher;
-
-            private static Process AdminLauncher => adminLauncher ?? (adminLauncher = CreateAdminLauncher());
-
-            private static Process CreateAdminLauncher()
-            {
-                var launcher = System.IO.Path.Combine(
-                    System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                    XIVLauncher.RunAs.Program.Name);
-
-                if (!File.Exists(launcher))
-                {
-                    return null;
-                }
-
-                var p = new Process();
-                p.StartInfo.FileName = launcher;
-                p.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                p.StartInfo.Verb = "RunAs";
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardInput = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardError = true;
-
-                p.Start();
-
-                return p;
-            }
-
-            private void LaunchRunAs(
-                string fileName)
-            {
-                var p = AdminLauncher;
-
-                p.StandardInput.WriteLine(fileName);
-                p.StandardInput.Flush();
             }
 
             private ICommand deleteCommand;

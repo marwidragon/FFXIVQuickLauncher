@@ -47,7 +47,7 @@ namespace XIVLauncher.Properties {
         }
         
         /// <summary>
-        ///   すべてについて、現在のスレッドの CurrentUICulture プロパティをオーバーライドします
+        ///   厳密に型指定されたこのリソース クラスを使用して、すべての検索リソースに対し、
         ///   現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
