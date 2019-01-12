@@ -300,6 +300,15 @@ namespace XIVLauncher.WPF.Models
                 set => this.SetProperty(ref this.delay, value);
             }
 
+            private bool isRunning = false;
+
+            public bool IsRunning
+
+            {
+                get => this.isRunning;
+                set => this.SetProperty(ref this.isRunning, value);
+            }
+
             public bool Run()
             {
                 if (!this.isEnabled)

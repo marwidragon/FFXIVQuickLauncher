@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -158,6 +159,7 @@ namespace XIVLauncher.WPF.Views
         {
             Settings.Instance.Save();
 
+#if !DEBUG
             if (!this.Config.ExistGame)
             {
                 MessageBox.Show(
@@ -181,10 +183,16 @@ namespace XIVLauncher.WPF.Views
 
                 return;
             }
+#endif
 
             try
             {
                 var kicked = false;
+
+                foreach (var tool in Models.Settings.Instance.ToolSettings)
+                {
+                    tool.IsRunning = false;
+                }
 
                 // ツールを起動する
                 await Task.Run(() =>
@@ -200,6 +208,8 @@ namespace XIVLauncher.WPF.Views
                             kicked = true;
                             Thread.Sleep(TimeSpan.FromSeconds(0.5));
                         }
+
+                        tool.IsRunning = true;
                     }
                 });
 
@@ -208,6 +218,7 @@ namespace XIVLauncher.WPF.Views
                     await Task.Delay(TimeSpan.FromSeconds(Settings.Instance.DelayLaunchFFXIV));
                 }
 
+#if !DEBUG
                 // FFXIVを起動する
                 await Task.Run(() =>
                     XIVGame.LaunchGame(
@@ -218,6 +229,9 @@ namespace XIVLauncher.WPF.Views
                         (int)this.Config.Language,
                         this.Config.IsDX11,
                         (int)this.Config.ExpansionLevel));
+#else
+                Debug.WriteLine("●FFXIV Started");
+#endif
                 var ffxivStartedTime = DateTime.Now;
 
                 // ポストプロセスツールを起動する
@@ -234,11 +248,21 @@ namespace XIVLauncher.WPF.Views
                         select
                         x;
 
-                    foreach (var tool in posts)
+                    var startTime = DateTime.Now;
+                    while ((DateTime.Now - startTime).TotalMinutes <= 5.0)
                     {
-                        if (DateTime.Now >= ffxivStartedTime.AddSeconds(tool.Delay))
+                        foreach (var tool in posts)
                         {
-                            tool.Run();
+                            if (DateTime.Now >= ffxivStartedTime.AddSeconds(tool.Delay))
+                            {
+                                tool.Run();
+                                tool.IsRunning = true;
+                            }
+                        }
+
+                        if (!posts.Any(x => !x.IsRunning))
+                        {
+                            break;
                         }
 
                         Thread.Sleep(TimeSpan.FromSeconds(0.05));
