@@ -37,7 +37,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>dalamud_icon.ico</ApplicationIcon>
+    <ApplicationIcon>XIVlauncher.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -135,9 +135,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="dalamud_icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="WPF\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +146,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="XIVlauncher.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="XIVLauncher.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

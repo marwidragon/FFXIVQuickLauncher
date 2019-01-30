@@ -12,7 +12,7 @@
   Height="450"
   Width="800"
   WindowStartupLocation="CenterScreen"
-  Icon="/XIVLauncher;component/dalamud_icon.ico"
+  Icon="/XIVLauncher;component/XIVLauncher.ico"
   RenderOptions.BitmapScalingMode="HighQuality"
   RenderOptions.ClearTypeHint="Enabled"
   RenderOptions.EdgeMode="Unspecified"
