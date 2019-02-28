@@ -40,7 +40,7 @@ namespace XIVLauncher
                     }
                     else
                     {
-                        XIVGame.LaunchGame(XIVGame.GetRealSid(IDTextBox.Text, PWTextBox.Text, OTPTextBox.Text), SettingsHelper.GetLanguage(), SettingsHelper.IsDX11(), SettingsHelper.GetExpansionLevel());
+                        XIVGame.LaunchGame(XIVGame.GetRealSid(IDTextBox.Text, PWTextBox.Text, OTPTextBox.Text), SettingsHelper.GetLanguage(), SettingsHelper.IsDX11(), SettingsHelper.UseSteam(), SettingsHelper.GetExpansionLevel());
                         Environment.Exit(0);
                     }
                 }
@@ -105,7 +105,7 @@ namespace XIVLauncher
             StatusLabel.Text = "Logging in...";
             try
             {
-                XIVGame.LaunchGame(XIVGame.GetRealSid(IDTextBox.Text, PWTextBox.Text, OTPTextBox.Text), SettingsHelper.GetLanguage(), SettingsHelper.IsDX11(), SettingsHelper.GetExpansionLevel());
+                XIVGame.LaunchGame(XIVGame.GetRealSid(IDTextBox.Text, PWTextBox.Text, OTPTextBox.Text), SettingsHelper.GetLanguage(), SettingsHelper.IsDX11(), SettingsHelper.UseSteam(), SettingsHelper.GetExpansionLevel());
                 Environment.Exit(0);
             }
             catch (Exception exc)
@@ -146,6 +146,10 @@ It should contain the folders ""game"" and ""boot"".", "Select Game Path", Messa
             DialogResult dxresult = MessageBox.Show("Do you want to use DirectX 11?", " ", MessageBoxButtons.YesNo, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
             if (dxresult == System.Windows.Forms.DialogResult.Yes) { Settings.Instance.IsDX11 = true; } else { Settings.Instance.IsDX11 = false; }
+
+			DialogResult steamresult = MessageBox.Show("Do you want to enable Steam?", " ", MessageBoxButtons.YesNo, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+
+			if (steamresult == System.Windows.Forms.DialogResult.Yes) { Settings.Instance.UseSteam = true; } else { Settings.Instance.UseSteam = false; }
 
             ExpansionSelector exSelector = new ExpansionSelector();
             exSelector.ShowDialog();

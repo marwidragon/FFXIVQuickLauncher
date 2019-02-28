@@ -108,6 +108,14 @@ namespace XIVLauncher.WPF.Models
             set => this.SetProperty(ref this.isDX11, value);
         }
 
+		private bool useSteam = false;
+
+		public bool UseSteam
+		{
+			get => this.useSteam;
+			set => this.SetProperty(ref this.useSteam, value);
+		}
+
         [XmlIgnore]
         public bool ExistGame =>
             !string.IsNullOrEmpty(this.GamePath) &&

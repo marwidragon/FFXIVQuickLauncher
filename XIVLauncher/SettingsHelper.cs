@@ -18,6 +18,9 @@ namespace XIVLauncher
         public static bool IsDX11() =>
             Settings.Instance.IsDX11;
 
+		public static bool UseSteam() =>
+			Settings.Instance.UseSteam;
+
         public static int GetExpansionLevel() =>
             Convert.ToInt32(Settings.Instance.ExpansionLevel);
 

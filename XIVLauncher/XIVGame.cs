@@ -10,27 +10,45 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Settings = XIVLauncher.SettingsHelper;
 
+using SteamworksSharp;
+using SteamworksSharp.Native;
+
 namespace XIVLauncher
 {
     internal static class XIVGame
     {
         private static string UserAgent = "SQEXAuthor/2.0.0(Windows 6.2; ja-jp; 45d19cc985)";
 
-        /// <summary>
-        /// Launches FFXIV with the supplied parameters.
-        /// </summary>
-        /// <param name="realsid">Real SessionID</param>
-        /// <param name="language">language(0=japanese,1=english,2=french,3=german)</param>
-        /// <param name="dx11">Runs the game in dx11 mode if true</param>
-        /// <param name="expansionlevel">current level of expansions loaded(0=ARR/default,1=Heavensward)</param>
-        public static void LaunchGame(string realsid, int language, bool dx11, int expansionlevel)
+		/// <summary>
+		/// Launches FFXIV with the supplied parameters.
+		/// </summary>
+		/// <param name="realsid">Real SessionID</param>
+		/// <param name="language">language(0=japanese,1=english,2=french,3=german)</param>
+		/// <param name="dx11">Runs the game in dx11 mode if true</param>
+		/// <param name="steam">Initializes Steam library if true</param>
+		/// <param name="expansionlevel">current level of expansions loaded(0=ARR/default,1=Heavensward)</param>
+		public static void LaunchGame(string realsid, int language, bool dx11, bool steam, int expansionlevel)
         {
             try
             {
+				if (steam)
+				{
+					SteamNative.Initialize();
+
+					if (SteamApi.IsSteamRunning())
+						SteamApi.Initialize(39210);
+				}
+
                 Process ffxivgame = new Process();
                 if (dx11) { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv_dx11.exe"; } else { ffxivgame.StartInfo.FileName = Settings.GetGamePath() + "/game/ffxiv.exe"; }
                 ffxivgame.StartInfo.Arguments = $"DEV.TestSID={realsid} DEV.MaxEntitledExpansionID={expansionlevel} language={language} region=1";
                 ffxivgame.Start();
+
+				if (steam)
+				{
+					SteamApi.Uninitialize();
+					SteamNative.Uninitialize();
+				}
             }
             catch (Exception exc)
             {

@@ -103,6 +103,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflector.cs" />
     <Compile Include="SettingsHelper.cs" />
+    <Compile Include="SteamWorksSharp\Interop\steam_api_interop.cs" />
+    <Compile Include="SteamWorksSharp\Native\Libs\INativeLibrary.cs" />
+    <Compile Include="SteamWorksSharp\Native\Libs\LibUtils.cs" />
+    <Compile Include="SteamWorksSharp\Native\Linux_x64\NativeLibrary.cs" />
+    <Compile Include="SteamWorksSharp\Native\Linux_x86\NativeLibrary.cs" />
+    <Compile Include="SteamWorksSharp\Native\Osx_x86\NativeLibrary.cs" />
+    <Compile Include="SteamWorksSharp\Native\SteamNative.cs" />
+    <Compile Include="SteamWorksSharp\Native\Windows_x64\NativeLibrary.cs" />
+    <Compile Include="SteamWorksSharp\Native\Windows_x86\NativeLibrary.cs" />
+    <Compile Include="SteamWorksSharp\SteamApi.cs" />
     <Compile Include="WPF\Models\SettingsModel.cs" />
     <Compile Include="WPF\Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
@@ -133,6 +143,9 @@
     </Compile>
     <None Include="app.manifest" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="SteamWorksSharp\Native\Linux_x64\libsteam_api.so" />
+    <EmbeddedResource Include="SteamWorksSharp\Native\Linux_x86\libsteam_api.so" />
+    <EmbeddedResource Include="SteamWorksSharp\Native\Osx_x86\libsteam_api.dylib" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="WPF\ViewModels\" />
@@ -152,6 +165,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="XIVLauncher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SteamWorksSharp\Native\Windows_x64\steam_api64.dll" />
+    <EmbeddedResource Include="SteamWorksSharp\Native\Windows_x86\steam_api.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

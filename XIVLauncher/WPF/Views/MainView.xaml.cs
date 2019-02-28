@@ -107,6 +107,7 @@ namespace XIVLauncher.WPF.Views
                                 this.Config.OnetimePassword),
                             (int)this.Config.Language,
                             this.Config.IsDX11,
+							this.Config.UseSteam,
                             (int)this.Config.ExpansionLevel));
 
                     this.Close();
@@ -228,6 +229,7 @@ namespace XIVLauncher.WPF.Views
                             this.Config.OnetimePassword),
                         (int)this.Config.Language,
                         this.Config.IsDX11,
+						this.Config.UseSteam,
                         (int)this.Config.ExpansionLevel));
 #else
                 Debug.WriteLine("●FFXIV Started");

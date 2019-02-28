@@ -12,6 +12,7 @@ namespace XIVLauncher
             InitializeComponent();
             LanguageSelector.SelectedIndex = System.Convert.ToInt32(Settings.Instance.Language);
             dxCheckBox.Checked = Settings.Instance.IsDX11;
+			steamCheckBox.Checked = Settings.Instance.UseSteam;
             comboBox1.SelectedIndex = (int)Settings.Instance.ExpansionLevel;
             pathLabel.Text = "Current Game Path:\n" + Settings.Instance.GamePath;
         }
@@ -21,6 +22,7 @@ namespace XIVLauncher
             Settings.Instance.Language = (FFXIVLanguages)Enum.ToObject(typeof(FFXIVLanguages), LanguageSelector.SelectedIndex);
             Settings.Instance.ExpansionLevel = (FFXIVExpantions)Enum.ToObject(typeof(FFXIVExpantions), comboBox1.SelectedIndex);
             if (dxCheckBox.Checked) { Settings.Instance.IsDX11 = true; } else { Settings.Instance.IsDX11 = false; }
+			if (steamCheckBox.Checked) { Settings.Instance.UseSteam = true; } else { Settings.Instance.UseSteam = false; }
             Settings.Instance.Save();
             this.Close();
         }
